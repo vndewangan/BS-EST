@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Smart AI Estimator — Void Architecture Studio</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+  <style>
+    :root {
+      --header-bg: #0f172a;
+      --header-surface: #1e293b;
+      --header-border: #334155;
+      --bg-canvas: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      --emerald: #059669;
+      --emerald-hover: #047857;
+      --emerald-soft: #ecfdf5;
+      --emerald-border: #a7f3d0;
+
+      --amber: #d97706;
+      --amber-hover: #b45309;
+      --amber-soft: #fffbeb;
+      --amber-border: #fde68a;
+
+      --danger: #dc2626;
+      --danger-soft: #fef2f2;
+      --danger-border: #fecaca;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding-bottom: 48px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .app-header {
+      background: var(--header-bg);
+      color: #ffffff;
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid var(--header-border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      background: var(--emerald);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--amber);
+    }
+
+    .brand-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .status-pill {
+      background: var(--header-surface);
+      border: 1px solid var(--header-border);
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      background: var(--header-surface);
+      color: #cbd5e1;
+      border: 1px solid var(--header-border);
+      padding: 8px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      border-color: #475569;
+    }
+
+    .tab-btn.active {
+      background: var(--emerald);
+      color: #ffffff;
+      border-color: var(--emerald);
+    }
+
+    /* Container & Panels */
+    .container {
+      max-width: 1120px;
+      margin: 18px auto 0;
+      padding: 0 14px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .tag-emerald {
+      background: var(--emerald-soft);
+      color: var(--emerald);
+      border: 1px solid var(--emerald-border);
+    }
+
+    .tag-amber {
+      background: var(--amber-soft);
+      color: var(--amber);
+      border: 1px solid var(--amber-border);
+    }
+
+    .tag-slate {
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+    }
+
+    /* Grids & Forms */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      color: var(--text-primary);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.12);
+    }
+
+    .input-inline {
+      display: flex;
+      gap: 6px;
+    }
+
+    .input-inline select {
+      width: 82px;
+      flex-shrink: 0;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-emerald {
+      background: var(--emerald);
+      color: #fff;
+    }
+
+    .btn-emerald:hover {
+      background: var(--emerald-hover);
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .btn-amber:hover {
+      background: var(--amber-hover);
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-subtle);
+    }
+
+    .btn-danger-soft {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border-color: var(--danger-border);
+      padding: 5px 9px;
+      font-size: 12px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    /* KPI Summary Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .kpi-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      border-left: 4px solid var(--emerald);
+    }
+
+    .kpi-box.amber {
+      border-left-color: var(--amber);
+    }
+
+    .kpi-box.slate {
+      border-left-color: var(--header-bg);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Member Item Card (BBS) */
+    .member-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .member-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .member-name-input {
+      max-width: 220px;
+      font-weight: 700 !important;
+      background: #fff !important;
+    }
+
+    .member-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-strong);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .sub-section {
+      background: #fff;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .sub-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bar-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .bar-row input,
+    .bar-row select {
+      width: auto;
+      min-width: 85px;
+    }
+
+    .check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1px solid var(--border-strong);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border-strong);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border-hairline);
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.total-row td {
+      background: var(--header-bg);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Mortar Dual Cards */
+    .mortar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mortar-card {
+      border: 1px solid var(--emerald-border);
+      background: var(--emerald-soft);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .mortar-card.amber {
+      border-color: var(--amber-border);
+      background: var(--amber-soft);
+    }
+
+    /* Progress bar for rules comparison */
+    .rule-bar-wrap {
+      background: var(--bg-subtle);
+      height: 8px;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .rule-bar-fill {
+      height: 100%;
+      background: var(--emerald);
+      border-radius: 99px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--header-bg);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border-left: 4px solid var(--emerald);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .beam-subtotal-banner {
+      background: var(--header-bg);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-title">
+          <span class="brand-badge">BUILD SMART</span>
+          <div>
+            <h1>Build Smart AI Estimator</h1>
+            <div class="brand-sub">Void Architecture Studio • Offline Site &amp; BOQ Engine</div>
+          </div>
+        </div>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span id="headerCalibStatus">Offline Ready • 0 Trained Sites</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" id="navTabs">
+        <button class="tab-btn active" data-tab="tab-bbs">1. TMT / BBS Steel (39ft)</button>
+        <button class="tab-btn" data-tab="tab-instant">2. Instant Calculator</button>
+        <button class="tab-btn" data-tab="tab-rcc">3. Detailed RCC</button>
+        <button class="tab-btn" data-tab="tab-ai">4. AI BOQ Estimate</button>
+        <button class="tab-btn" data-tab="tab-train">5. Train Model</button>
+        <button class="tab-btn" data-tab="tab-rules">6. Learned Rules</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== TAB 1: TMT / BBS STEEL (39 FT ORDER) ==================== -->
+    <section id="tab-bbs" class="tab-panel active">
+      <!-- Global Bar Order Settings -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">39-Ft Full Bar Order &amp; IS 456 BBS Engine <span class="tag tag-emerald">d²/162 kg/m</span></div>
+            <div class="card-subtitle">Footing, Column, Beam &amp; Slab ka exact steel weight + 39-ft full bar count with wastage</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="copyBBSWhatsApp()">Copy Steel Order (Bars + KG)</button>
+        </div>
+
+        <div class="grid-4">
+          <div class="form-group">
+            <label>Standard Full Bar Length</label>
+            <select id="bbsBarLenSelect" onchange="handleBarLenChange()">
+              <option value="39" selected>39.00 ft (Standard Indian)</option>
+              <option value="39.37">39.37 ft (12.0 Meter)</option>
+              <option value="40">40.00 ft</option>
+              <option value="custom">Custom Length (ft)</option>
+            </select>
+          </div>
+          <div class="form-group" id="bbsCustomLenWrap" style="display:none;">
+            <label>Custom Bar Length (ft)</label>
+            <input type="number" id="bbsCustomLenVal" value="39" step="0.1" min="10" oninput="recalcAllBBS()" />
+          </div>
+          <div class="form-group">
+            <label>Cutting / Lap Wastage %</label>
+            <select id="bbsWastage" onchange="recalcAllBBS()">
+              <option value="0">0% (Exact Net BBS)</option>
+              <option value="3" selected>+3% (Standard Site Wastage)</option>
+              <option value="5">+5% (Heavy Laps / Cuttings)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>TMT Rate (₹ / KG)</label>
+            <input type="number" id="bbsRateKg" value="62" min="0" step="0.5" oninput="recalcAllBBS()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Total Full Bars to Order</div>
+          <div class="kpi-val" id="kpiTotalBars">0 Bars</div>
+          <div class="kpi-sub" id="kpiBarLenSub">@ 39 ft/bar (Size-wise Rounded)</div>
+        </div>
+        <div class="kpi-box amber">
+          <div class="kpi-label">Order Steel Weight</div>
+          <div class="kpi-val" id="kpiOrderKg">0.0 kg</div>
+          <div class="kpi-sub" id="kpiOrderMt">0.000 MT (Full Bars)</div>
+        </div>
+        <div class="kpi-box slate">
+          <div class="kpi-label">Net BBS Weight (No Wastage)</div>
+          <div class="kpi-val" id="kpiNetKg">0.0 kg</div>
+          <div class="kpi-sub" id="kpiGrossKg">With Wastage: 0.0 kg</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Est. TMT Order Cost</div>
+          <div class="kpi-val" id="kpiTotalCost">₹0</div>
+          <div class="kpi-sub" id="kpiCostNote">Based on full bars ordered</div>
+        </div>
+      </div>
+
+      <!-- Diameter-Wise Order Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Diameter-Wise TMT Order Summary (8mm – 25mm)</div>
+            <div class="card-subtitle">Har bar size ke liye Net Length, Gross Length (with wastage), Full 39-ft Bars &amp; Weight</div>
+          </div>
+          <span class="tag tag-amber">Dealer Order Ready</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Bar Dia</th>
+                <th class="num">Wt / Bar (kg)</th>
+                <th class="num">Net Len (ft)</th>
+                <th class="num">Gross Len (ft)</th>
+                <th class="num">Exact Bars</th>
+                <th class="num">Full Bars Order</th>
+                <th class="num">Net Wt (kg)</th>
+                <th class="num">Order Wt (kg)</th>
+                <th class="num">Off-Cut (ft)</th>
+              </tr>
+            </thead>
+            <tbody id="bbsOrderTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 1. FOOTING BBS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">A. Footing Steel (Auto 50mm Cover &amp; Auto Height L-Bend)</div>
+            <div class="card-subtitle">Dono side mesh (X &amp; Y), auto L-bend (H − 4"), aur optional Top Mesh + Chair Spacers</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="addFootingBBS()">+ Add Footing</button>
+        </div>
+        <div id="footingBBSList"></div>
+      </div>
+
+      <!-- 2. COLUMN BBS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">B. Column Steel (Multi-Dia 8mm–25mm + 135° Stirrups)</div>
+            <div class="card-subtitle">Ek column mein alag-alag dia ke vertical bars, base L-leg + lap, aur seismic stirrups</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="addColumnBBS()">+ Add Column</button>
+        </div>
+        <div id="columnBBSList"></div>
+      </div>
+
+      <!-- 3. BEAM BBS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">C. Beam Steel (Top/Bottom Main, Curtail, Mid Extra &amp; Crank)</div>
+            <div class="card-subtitle">Top/Bottom main bars, Left/Right top curtail, Bottom mid-span extra, crank bars &amp; stirrups</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="addBeamBBS()">+ Add Beam</button>
+        </div>
+        <div id="beamBBSList"></div>
+        <div class="beam-subtotal-banner" id="beamSubtotalBanner">
+          <div>
+            <strong>Total All Beams TMT Summary:</strong>
+            <span id="beamSubDetails" style="color:#cbd5e1; margin-left:6px;">0.0 kg (0.000 MT)</span>
+          </div>
+          <div id="beamSubBarsBadge" style="font-weight:700; color:#34d399;">0 Full Bars (39ft)</div>
+        </div>
+      </div>
+
+      <!-- 4. SLAB BBS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">D. Slab Steel (One-Way &amp; Two-Way Cranked Mesh)</div>
+            <div class="card-subtitle">Total slab area ke hisab se main cranked bars aur distribution / top support bars</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="addSlabBBS()">+ Add Slab</button>
+        </div>
+        <div id="slabBBSList"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: INSTANT CALCULATOR ==================== -->
+    <section id="tab-instant" class="tab-panel">
+      <div class="grid-2">
+        <!-- Instant RCC Calculator -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Instant RCC Material Calculator</div>
+              <div class="card-subtitle">Dry Factor 1.54 • Cement (Bags), Sand &amp; Aggregate (CFT), Steel (KG)</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="copyInstantRCC()">Copy</button>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:10px;">
+            <div class="form-group">
+              <label>Length (ft)</label>
+              <input type="number" id="instRccL" value="20" step="0.1" min="0" oninput="calcInstantRCC()" />
+            </div>
+            <div class="form-group">
+              <label>Breadth (ft)</label>
+              <input type="number" id="instRccB" value="15" step="0.1" min="0" oninput="calcInstantRCC()" />
+            </div>
+            <div class="form-group">
+              <label>Height / Thickness</label>
+              <div class="input-inline">
+                <input type="number" id="instRccH" value="5" step="0.1" min="0" oninput="calcInstantRCC()" />
+                <select id="instRccHUnit" onchange="calcInstantRCC()">
+                  <option value="inch" selected>inch</option>
+                  <option value="ft">ft</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Quantity / Nos</label>
+              <input type="number" id="instRccNos" value="1" step="1" min="1" oninput="calcInstantRCC()" />
+            </div>
+            <div class="form-group">
+              <label>Concrete Grade</label>
+              <select id="instRccGrade" onchange="calcInstantRCC()">
+                <option value="M20" selected>M20 (1 : 1.5 : 3)</option>
+                <option value="M25">M25 (1 : 1 : 2)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Steel Percentage (%)</label>
+              <input type="number" id="instRccSteelPct" value="0.8" step="0.1" min="0" oninput="calcInstantRCC()" />
+            </div>
+          </div>
+
+          <div class="kpi-grid" style="margin-bottom:0;">
+            <div class="kpi-box">
+              <div class="kpi-label">Cement (50kg)</div>
+              <div class="kpi-val" id="instRccCement">0 Bags</div>
+              <div class="kpi-sub" id="instRccVolSub">Wet Vol: 0.00 m³</div>
+            </div>
+            <div class="kpi-box amber">
+              <div class="kpi-label">Sand (Fine)</div>
+              <div class="kpi-val" id="instRccSand">0 CFT</div>
+              <div class="kpi-sub">Dry Vol × Ratio</div>
+            </div>
+            <div class="kpi-box slate">
+              <div class="kpi-label">Aggregate (20mm)</div>
+              <div class="kpi-val" id="instRccAgg">0 CFT</div>
+              <div class="kpi-sub">Coarse Aggregate</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">TMT Steel</div>
+              <div class="kpi-val" id="instRccSteel">0.0 kg</div>
+              <div class="kpi-sub" id="instRccSteelSub">@ 0.8% of RCC Vol</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instant Brickwall Calculator -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Instant Brickwall Calculator</div>
+              <div class="card-subtitle">Bricks Count (+5% Wastage) &amp; Both 1:4 and 1:5 Mortar Options</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="copyInstantBrick()">Copy</button>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:10px;">
+            <div class="form-group">
+              <label>Type of Brick</label>
+              <select id="instBrickType" onchange="calcInstantBrick()">
+                <option value="200" selected>200mm × 100mm × 100mm (Modular)</option>
+                <option value="230">230mm × 75mm × 115mm (Traditional)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Wall Type</label>
+              <select id="instWallType" onchange="calcInstantBrick()">
+                <option value="full" selected>Full Brick Wall (9" / 8")</option>
+                <option value="half">Half Brick Wall (4.5" / 4")</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Wall Length (ft)</label>
+              <input type="number" id="instWallL" value="30" step="0.1" min="0" oninput="calcInstantBrick()" />
+            </div>
+            <div class="form-group">
+              <label>Wall Height (ft)</label>
+              <input type="number" id="instWallH" value="10" step="0.1" min="0" oninput="calcInstantBrick()" />
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label>Door / Window Deduction (Sq. Ft.) — Optional</label>
+              <input type="number" id="instWallDeduct" value="21" step="0.5" min="0" oninput="calcInstantBrick()" />
+            </div>
+          </div>
+
+          <div class="kpi-box" style="margin-bottom:10px;">
+            <div class="kpi-label">Total Bricks Required (Including 5% Wastage)</div>
+            <div class="kpi-val" id="instBrickCount">0 Bricks</div>
+            <div class="kpi-sub" id="instBrickSub">Net Area: 0 sq.ft • Net Bricks: 0</div>
+          </div>
+
+          <div class="mortar-grid">
+            <div class="mortar-card">
+              <div style="font-size:12px; font-weight:800; color:var(--emerald); margin-bottom:6px;">OPTION A: 1:4 MORTAR (Strong / Half-Brick)</div>
+              <div style="font-size:15px; font-weight:800;" id="mortar14Cement">0.0 Bags Cement</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text-secondary);" id="mortar14Sand">0.0 CFT Sand</div>
+            </div>
+            <div class="mortar-card amber">
+              <div style="font-size:12px; font-weight:800; color:var(--amber); margin-bottom:6px;">OPTION B: 1:5 MORTAR (Standard Full Wall)</div>
+              <div style="font-size:15px; font-weight:800;" id="mortar15Cement">0.0 Bags Cement</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text-secondary);" id="mortar15Sand">0.0 CFT Sand</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: DETAILED RCC CALCULATOR ==================== -->
+    <section id="tab-rcc" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Detailed RCC Element-Wise Quantity &amp; Cost</div>
+            <div class="card-subtitle">Footing, Column, Beam &amp; Slab ke multiple sizes + custom reinforcement %</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="copyDetailedRCC()">Copy RCC BOQ</button>
+        </div>
+
+        <div class="grid-4" style="margin-bottom:12px;">
+          <div class="form-group">
+            <label>Concrete Grade</label>
+            <select id="detRccGrade" onchange="recalcDetailedRCC()">
+              <option value="M20" selected>M20 (1 : 1.5 : 3)</option>
+              <option value="M25">M25 (1 : 1 : 2)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Concrete Wastage %</label>
+            <select id="detRccWastage" onchange="recalcDetailedRCC()">
+              <option value="0">0% (Exact Net)</option>
+              <option value="2" selected>+2% Standard</option>
+              <option value="5">+5% Site Buffer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cement Rate (₹/Bag)</label>
+            <input type="number" id="detRateCement" value="360" oninput="recalcDetailedRCC()" />
+          </div>
+          <div class="form-group">
+            <label>TMT Rate (₹/KG)</label>
+            <input type="number" id="detRateSteel" value="62" oninput="recalcDetailedRCC()" />
+          </div>
+        </div>
+
+        <div class="kpi-grid" style="margin-bottom:0;">
+          <div class="kpi-box">
+            <div class="kpi-label">Total Cement</div>
+            <div class="kpi-val" id="detTotCement">0 Bags</div>
+            <div class="kpi-sub" id="detTotVol">Wet RCC: 0.00 m³</div>
+          </div>
+          <div class="kpi-box amber">
+            <div class="kpi-label">Total Sand</div>
+            <div class="kpi-val" id="detTotSand">0 CFT</div>
+            <div class="kpi-sub">River / M-Sand</div>
+          </div>
+          <div class="kpi-box slate">
+            <div class="kpi-label">Total Aggregate</div>
+            <div class="kpi-val" id="detTotAgg">0 CFT</div>
+            <div class="kpi-sub">20mm Coarse</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">Total TMT Steel</div>
+            <div class="kpi-val" id="detTotSteel">0 kg</div>
+            <div class="kpi-sub" id="detTotSteelMt">0.000 MT</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed RCC Element Rows -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">RCC Structural Members</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="addDetRccRow('Footing')">+ Footing</button>
+            <button class="btn btn-outline btn-sm" onclick="addDetRccRow('Column')">+ Column</button>
+            <button class="btn btn-outline btn-sm" onclick="addDetRccRow('Beam')">+ Beam</button>
+            <button class="btn btn-outline btn-sm" onclick="addDetRccRow('Slab')">+ Slab</button>
+          </div>
+        </div>
+        <div id="detRccRows"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Element-Wise Breakdown Summary</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th class="num">Wet Vol (m³)</th>
+                <th class="num">Cement (Bags)</th>
+                <th class="num">Sand (CFT)</th>
+                <th class="num">Aggregate (CFT)</th>
+                <th class="num">TMT Steel (kg)</th>
+              </tr>
+            </thead>
+            <tbody id="detRccTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: AI SELF-CALIBRATING BOQ ESTIMATE ==================== -->
+    <section id="tab-ai" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Self-Calibrating Project BOQ Predictor <span class="tag tag-emerald" id="aiAccuracyTag">Base Thumb-Rules (±12%)</span></div>
+            <div class="card-subtitle">Aapke saved completed projects se seekh kar whole-building material BOQ aur cost nikalta hai</div>
+          </div>
+          <button class="btn btn-emerald btn-sm" onclick="copyAIBOQ()">Copy Full BOQ</button>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label>Total Built-up Area (Sq. Ft.)</label>
+            <input type="number" id="aiArea" value="1500" min="100" step="50" oninput="calcAIBOQ()" />
+          </div>
+          <div class="form-group">
+            <label>Number of Floors</label>
+            <select id="aiFloors" onchange="calcAIBOQ()">
+              <option value="G">Ground Floor Only (G)</option>
+              <option value="G+1" selected>Ground + 1 (G+1)</option>
+              <option value="G+2">Ground + 2 (G+2)</option>
+              <option value="G+3">G+3 or Higher</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Structure Type</label>
+            <select id="aiStructure" onchange="calcAIBOQ()">
+              <option value="rcc" selected>RCC Framed Structure</option>
+              <option value="load">Load-Bearing Masonry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Foundation / Soil Condition</label>
+            <select id="aiFoundation" onchange="calcAIBOQ()">
+              <option value="normal" selected>Normal Isolated Footing (4–5 ft)</option>
+              <option value="deep">Deep Footing / Raft / Black Cotton</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Finishing Grade</label>
+            <select id="aiFinish" onchange="calcAIBOQ()">
+              <option value="basic">Basic / Economy</option>
+              <option value="standard" selected>Standard Residential</option>
+              <option value="premium">Premium Architectural</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Estimated Total Material Cost</label>
+            <div style="font-size:18px; font-weight:800; color:var(--emerald); padding-top:4px;" id="aiGrandCost">₹0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Predicted Material Quantities &amp; Safe Order Range</div>
+          <span class="tag tag-slate" id="aiModelSourceNote">Source: IS Base Rules</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Material Item</th>
+                <th class="num">Unit Rate/Sq.ft</th>
+                <th class="num">Predicted Qty</th>
+                <th class="num">Safe Range (Min–Max)</th>
+                <th class="num">Market Rate (₹)</th>
+                <th class="num">Est. Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="aiBoqTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: TRAIN MODEL ==================== -->
+    <section id="tab-train" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Train Estimator with Actual Site Consumption</div>
+            <div class="card-subtitle">Completed project ka actual bill/consumption save karein—system apne aap firm ratios calibrate karega</div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="prefillTrainFromEstimate()">Auto-fill from Estimate</button>
+            <button class="btn btn-amber btn-sm" onclick="loadSampleProjects()">+ Load 2 Sample Sites</button>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:12px;">
+          <div class="form-group">
+            <label>Site / Project Name</label>
+            <input type="text" id="trName" placeholder="e.g. Shankar Nagar G+1 Residence" />
+          </div>
+          <div class="form-group">
+            <label>Actual Built-up Area (Sq. Ft.)</label>
+            <input type="number" id="trArea" value="1500" min="100" />
+          </div>
+          <div class="form-group">
+            <label>Floors</label>
+            <select id="trFloors">
+              <option value="G">Ground (G)</option>
+              <option value="G+1" selected>G+1</option>
+              <option value="G+2">G+2</option>
+              <option value="G+3">G+3+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Structure Type</label>
+            <select id="trStructure">
+              <option value="rcc" selected>RCC Framed</option>
+              <option value="load">Load-Bearing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Foundation</label>
+            <select id="trFoundation">
+              <option value="normal" selected>Normal (4–5 ft)</option>
+              <option value="deep">Deep / Raft</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Finishing Grade</label>
+            <select id="trFinish">
+              <option value="basic">Basic</option>
+              <option value="standard" selected>Standard</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sub-title" style="margin-top:14px;">Actual Consumed Material Quantities</div>
+        <div class="grid-4" style="margin-bottom:14px;">
+          <div class="form-group">
+            <label>Cement (50kg Bags)</label>
+            <input type="number" id="trCement" value="660" min="0" />
+          </div>
+          <div class="form-group">
+            <label>TMT Steel (KG)</label>
+            <input type="number" id="trSteel" value="5850" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Sand (CFT)</label>
+            <input type="number" id="trSand" value="2850" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Aggregate (CFT)</label>
+            <input type="number" id="trAgg" value="2100" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Bricks (Nos)</label>
+            <input type="number" id="trBricks" value="31500" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Floor &amp; Wall Tiles (Sq.ft)</label>
+            <input type="number" id="trTiles" value="1850" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Paint &amp; Putty Equiv (Liters)</label>
+            <input type="number" id="trPaint" value="270" min="0" />
+          </div>
+        </div>
+
+        <button class="btn btn-emerald" onclick="saveTrainingProject()">Save Actual Project &amp; Calibrate Model</button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 6: LEARNED RULES & BACKUP ==================== -->
+    <section id="tab-rules" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Book Thumb-Rules vs. Learned Firm Ratios</div>
+            <div class="card-subtitle">Normalized per Sq. Ft. baseline rates (G+1 Standard RCC reference)</div>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="exportTrainingJSON()">Export Backup (.json)</button>
+            <label class="btn btn-outline btn-sm" style="margin:0;">
+              Import Backup (.json)
+              <input type="file" accept=".json" style="display:none;" onchange="importTrainingJSON(event)" />
+            </label>
+          </div>
+        </div>
+        <div id="rulesComparisonGrid" class="grid-2"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Saved Training Projects (<span id="savedProjectsCount">0</span>)</div>
+          <button class="btn btn-danger-soft" onclick="clearAllTrainingData()">Reset Training Data</button>
+        </div>
+        <div id="savedProjectsList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <script>
+    /* ==========================================================================
+       1. NAVIGATION & UTILITIES
+       ========================================================================== */
+    const DIA_LIST = [8, 10, 12, 16, 20, 25];
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('Copied for WhatsApp!'));
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Copied for WhatsApp!');
+      }
+    }
+
+    function fmt(n, dec = 2) {
+      return Number(n || 0).toLocaleString('en-IN', {
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec
+      });
+    }
+
+    function fmtInt(n) {
+      return Math.round(Number(n || 0)).toLocaleString('en-IN');
+    }
+
+    function diaOptionsHTML(selectedDia) {
+      return DIA_LIST.map(d => `<option value="${d}" ${Number(selectedDia) === d ? 'selected' : ''}>${d} mm</option>`).join('');
+    }
+
+    function spacingOptionsHTML(selectedSp, list = [4, 5, 6, 7, 8, 9]) {
+      return list.map(s => `<option value="${s}" ${Number(selectedSp) === s ? 'selected' : ''}>${s}" c/c</option>`).join('');
+    }
+
+    function kgPerFoot(diaMm) {
+      const kgPerM = (diaMm * diaMm) / 162;
+      return kgPerM / 3.28084;
+    }
+
+    /* ==========================================================================
+       2. TAB 1: TMT / BBS STEEL (39-FT FULL BAR ORDER ENGINE)
+       ========================================================================== */
+    let bbsData = {
+      footings: [
+        { id: 1, name: 'F1 (Main)', L: 5, B: 5, H: 15, nos: 8, diaX: 12, spX: 6, diaY: 12, spY: 6, topMesh: false }
+      ],
+      columns: [
+        {
+          id: 1,
+          name: 'C1 (9"x15")',
+          W: 9,
+          D: 15,
+          H: 11,
+          nos: 8,
+          lapL: true,
+          bars: [
+            { qty: 4, dia: 16 },
+            { qty: 2, dia: 12 }
+          ],
+          stDia: 8,
+          stSp: 6
+        }
+      ],
+      beams: [
+        {
+          id: 1,
+          name: 'PB1 / FB1',
+          W: 9,
+          D: 15,
+          L: 16,
+          nos: 4,
+          topQty: 2,
+          topDia: 12,
+          botQty: 3,
+          botDia: 12,
+          topLeftQty: 2,
+          topLeftDia: 12,
+          topRightQty: 2,
+          topRightDia: 12,
+          botMidQty: 1,
+          botMidDia: 12,
+          crankQty: 0,
+          crankDia: 12,
+          stDia: 8,
+          stSp: 6
+        }
+      ],
+      slabs: [
+        { id: 1, name: 'Ground Roof Slab', area: 1000, thick: 5, type: 'two', mainDia: 10, mainSp: 6, distDia: 8, distSp: 7 }
+      ]
+    };
+
+    let lastBBSOrderSummary = null;
+
+    function handleBarLenChange() {
+      const sel = document.getElementById('bbsBarLenSelect').value;
+      document.getElementById('bbsCustomLenWrap').style.display = sel === 'custom' ? 'flex' : 'none';
+      recalcAllBBS();
+    }
+
+    function getStandardBarLenFt() {
+      const sel = document.getElementById('bbsBarLenSelect').value;
+      if (sel === 'custom') {
+        return Math.max(10, parseFloat(document.getElementById('bbsCustomLenVal').value) || 39);
+      }
+      return parseFloat(sel) || 39;
+    }
+
+    /* Render Footings */
+    function renderFootingsBBS() {
+      const container = document.getElementById('footingBBSList');
+      if (!bbsData.footings.length) {
+        container.innerHTML = '<div style="font-size:13px; color:var(--text-muted);">No footings added. Click "+ Add Footing" above.</div>';
+        return;
+      }
+      container.innerHTML = bbsData.footings.map((f, idx) => `
+        <div class="member-box">
+          <div class="member-top">
+            <input class="member-name-input" type="text" value="${f.name}" oninput="updateFooting(${idx}, 'name', this.value)" />
+            <div style="display:flex; gap:8px; align-items:center;">
+              <label class="check-pill">
+                <input type="checkbox" ${f.topMesh ? 'checked' : ''} onchange="updateFooting(${idx}, 'topMesh', this.checked)" />
+                Top Mesh (Double + Chairs)
+              </label>
+              <button class="btn btn-danger-soft" onclick="removeFooting(${idx})">Remove</button>
+            </div>
+          </div>
+          <div class="grid-4">
+            <div class="form-group">
+              <label>Length L (ft)</label>
+              <input type="number" value="${f.L}" step="0.25" min="1" oninput="updateFooting(${idx}, 'L', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Breadth B (ft)</label>
+              <input type="number" value="${f.B}" step="0.25" min="1" oninput="updateFooting(${idx}, 'B', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Height H (inch)</label>
+              <input type="number" value="${f.H}" step="1" min="6" oninput="updateFooting(${idx}, 'H', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Total Nos. of Footing</label>
+              <input type="number" value="${f.nos}" step="1" min="1" oninput="updateFooting(${idx}, 'nos', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>X-Dir Bar Dia</label>
+              <select onchange="updateFooting(${idx}, 'diaX', +this.value)">${diaOptionsHTML(f.diaX)}</select>
+            </div>
+            <div class="form-group">
+              <label>X-Dir Spacing</label>
+              <select onchange="updateFooting(${idx}, 'spX', +this.value)">${spacingOptionsHTML(f.spX, [4, 5, 6, 7, 8, 9])}</select>
+            </div>
+            <div class="form-group">
+              <label>Y-Dir Bar Dia</label>
+              <select onchange="updateFooting(${idx}, 'diaY', +this.value)">${diaOptionsHTML(f.diaY)}</select>
+            </div>
+            <div class="form-group">
+              <label>Y-Dir Spacing</label>
+              <select onchange="updateFooting(${idx}, 'spY', +this.value)">${spacingOptionsHTML(f.spY, [4, 5, 6, 7, 8, 9])}</select>
+            </div>
+          </div>
+          <div class="member-footer" id="footingMeta_${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    function addFootingBBS() {
+      const n = bbsData.footings.length + 1;
+      bbsData.footings.push({ id: Date.now(), name: `F${n}`, L: 4.5, B: 4.5, H: 14, nos: 4, diaX: 12, spX: 6, diaY: 12, spY: 6, topMesh: false });
+      renderFootingsBBS();
+      recalcAllBBS();
+    }
+
+    function removeFooting(idx) {
+      bbsData.footings.splice(idx, 1);
+      renderFootingsBBS();
+      recalcAllBBS();
+    }
+
+    function updateFooting(idx, key, val) {
+      bbsData.footings[idx][key] = val;
+      recalcAllBBS();
+    }
+
+    /* Render Columns */
+    function renderColumnsBBS() {
+      const container = document.getElementById('columnBBSList');
+      if (!bbsData.columns.length) {
+        container.innerHTML = '<div style="font-size:13px; color:var(--text-muted);">No columns added. Click "+ Add Column" above.</div>';
+        return;
+      }
+      container.innerHTML = bbsData.columns.map((c, idx) => `
+        <div class="member-box">
+          <div class="member-top">
+            <input class="member-name-input" type="text" value="${c.name}" oninput="updateColumn(${idx}, 'name', this.value)" />
+            <div style="display:flex; gap:8px; align-items:center;">
+              <label class="check-pill">
+                <input type="checkbox" ${c.lapL ? 'checked' : ''} onchange="updateColumn(${idx}, 'lapL', this.checked)" />
+                Include Base L (12") &amp; Top Lap (50d)
+              </label>
+              <button class="btn btn-danger-soft" onclick="removeColumn(${idx})">Remove</button>
+            </div>
+          </div>
+          <div class="grid-4">
+            <div class="form-group">
+              <label>Width W (inch)</label>
+              <input type="number" value="${c.W}" step="1" min="6" oninput="updateColumn(${idx}, 'W', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Depth D (inch)</label>
+              <input type="number" value="${c.D}" step="1" min="6" oninput="updateColumn(${idx}, 'D', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Column Height (ft)</label>
+              <input type="number" value="${c.H}" step="0.5" min="1" oninput="updateColumn(${idx}, 'H', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Total Nos. of Column</label>
+              <input type="number" value="${c.nos}" step="1" min="1" oninput="updateColumn(${idx}, 'nos', +this.value)" />
+            </div>
+          </div>
+
+          <div class="sub-section">
+            <div class="sub-title">
+              <span>Vertical Main Bars (8mm – 25mm)</span>
+              <button class="btn btn-outline btn-sm" onclick="addColBarRow(${idx})">+ Add Bar Dia</button>
+            </div>
+            ${c.bars.map((b, bIdx) => `
+              <div class="bar-row">
+                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">Nos:</span>
+                <input type="number" value="${b.qty}" min="1" step="1" style="width:75px;" oninput="updateColBar(${idx}, ${bIdx}, 'qty', +this.value)" />
+                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">Dia:</span>
+                <select style="width:95px;" onchange="updateColBar(${idx}, ${bIdx}, 'dia', +this.value)">${diaOptionsHTML(b.dia)}</select>
+                ${c.bars.length > 1 ? `<button class="btn btn-danger-soft" onclick="removeColBar(${idx}, ${bIdx})">×</button>` : ''}
+              </div>
+            `).join('')}
+
+            <div class="grid-2" style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border-hairline);">
+              <div class="form-group">
+                <label>Stirrups Bar Dia</label>
+                <select onchange="updateColumn(${idx}, 'stDia', +this.value)">
+                  <option value="8" ${c.stDia === 8 ? 'selected' : ''}>8 mm</option>
+                  <option value="10" ${c.stDia === 10 ? 'selected' : ''}>10 mm</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Stirrups Spacing</label>
+                <select onchange="updateColumn(${idx}, 'stSp', +this.value)">${spacingOptionsHTML(c.stSp, [4, 5, 6, 7, 8])}</select>
+              </div>
+            </div>
+          </div>
+          <div class="member-footer" id="columnMeta_${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    function addColumnBBS() {
+      const n = bbsData.columns.length + 1;
+      bbsData.columns.push({
+        id: Date.now(),
+        name: `C${n} (9"x12")`,
+        W: 9,
+        D: 12,
+        H: 11,
+        nos: 4,
+        lapL: true,
+        bars: [{ qty: 4, dia: 12 }],
+        stDia: 8,
+        stSp: 6
+      });
+      renderColumnsBBS();
+      recalcAllBBS();
+    }
+
+    function removeColumn(idx) {
+      bbsData.columns.splice(idx, 1);
+      renderColumnsBBS();
+      recalcAllBBS();
+    }
+
+    function updateColumn(idx, key, val) {
+      bbsData.columns[idx][key] = val;
+      recalcAllBBS();
+    }
+
+    function addColBarRow(cIdx) {
+      bbsData.columns[cIdx].bars.push({ qty: 2, dia: 12 });
+      renderColumnsBBS();
+      recalcAllBBS();
+    }
+
+    function removeColBar(cIdx, bIdx) {
+      bbsData.columns[cIdx].bars.splice(bIdx, 1);
+      renderColumnsBBS();
+      recalcAllBBS();
+    }
+
+    function updateColBar(cIdx, bIdx, key, val) {
+      bbsData.columns[cIdx].bars[bIdx][key] = val;
+      recalcAllBBS();
+    }
+
+    /* Render Beams */
+    function renderBeamsBBS() {
+      const container = document.getElementById('beamBBSList');
+      if (!bbsData.beams.length) {
+        container.innerHTML = '<div style="font-size:13px; color:var(--text-muted);">No beams added. Click "+ Add Beam" above.</div>';
+        return;
+      }
+      container.innerHTML = bbsData.beams.map((b, idx) => `
+        <div class="member-box">
+          <div class="member-top">
+            <input class="member-name-input" type="text" value="${b.name}" oninput="updateBeam(${idx}, 'name', this.value)" />
+            <button class="btn btn-danger-soft" onclick="removeBeam(${idx})">Remove</button>
+          </div>
+          <div class="grid-4">
+            <div class="form-group">
+              <label>Beam Width W (inch)</label>
+              <input type="number" value="${b.W}" step="1" min="6" oninput="updateBeam(${idx}, 'W', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Beam Depth D (inch)</label>
+              <input type="number" value="${b.D}" step="1" min="6" oninput="updateBeam(${idx}, 'D', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Beam Span / Length (ft)</label>
+              <input type="number" value="${b.L}" step="0.5" min="1" oninput="updateBeam(${idx}, 'L', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Nos. of Similar Beams</label>
+              <input type="number" value="${b.nos}" step="1" min="1" oninput="updateBeam(${idx}, 'nos', +this.value)" />
+            </div>
+          </div>
+
+          <div class="sub-section">
+            <div class="sub-title">Main Through Bars (Top &amp; Bottom)</div>
+            <div class="grid-4">
+              <div class="form-group">
+                <label>Top Main Bars (Nos)</label>
+                <input type="number" value="${b.topQty}" min="0" step="1" oninput="updateBeam(${idx}, 'topQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Top Main Dia</label>
+                <select onchange="updateBeam(${idx}, 'topDia', +this.value)">${diaOptionsHTML(b.topDia)}</select>
+              </div>
+              <div class="form-group">
+                <label>Bottom Main Bars (Nos)</label>
+                <input type="number" value="${b.botQty}" min="0" step="1" oninput="updateBeam(${idx}, 'botQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Bottom Main Dia</label>
+                <select onchange="updateBeam(${idx}, 'botDia', +this.value)">${diaOptionsHTML(b.botDia)}</select>
+              </div>
+            </div>
+
+            <div class="sub-title" style="margin-top:10px;">Extra / Curtail / Crank Bars</div>
+            <div class="grid-4">
+              <div class="form-group">
+                <label>Top Left Extra (Nos)</label>
+                <input type="number" value="${b.topLeftQty}" min="0" step="1" oninput="updateBeam(${idx}, 'topLeftQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Top Left Dia</label>
+                <select onchange="updateBeam(${idx}, 'topLeftDia', +this.value)">${diaOptionsHTML(b.topLeftDia)}</select>
+              </div>
+              <div class="form-group">
+                <label>Top Right Extra (Nos)</label>
+                <input type="number" value="${b.topRightQty}" min="0" step="1" oninput="updateBeam(${idx}, 'topRightQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Top Right Dia</label>
+                <select onchange="updateBeam(${idx}, 'topRightDia', +this.value)">${diaOptionsHTML(b.topRightDia)}</select>
+              </div>
+              <div class="form-group">
+                <label>Bottom Mid Extra (Nos)</label>
+                <input type="number" value="${b.botMidQty}" min="0" step="1" oninput="updateBeam(${idx}, 'botMidQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Bottom Mid Dia</label>
+                <select onchange="updateBeam(${idx}, 'botMidDia', +this.value)">${diaOptionsHTML(b.botMidDia)}</select>
+              </div>
+              <div class="form-group">
+                <label>Crank / Bent-Up (Nos)</label>
+                <input type="number" value="${b.crankQty}" min="0" step="1" oninput="updateBeam(${idx}, 'crankQty', +this.value)" />
+              </div>
+              <div class="form-group">
+                <label>Crank Bar Dia</label>
+                <select onchange="updateBeam(${idx}, 'crankDia', +this.value)">${diaOptionsHTML(b.crankDia)}</select>
+              </div>
+            </div>
+
+            <div class="grid-2" style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border-hairline);">
+              <div class="form-group">
+                <label>Stirrups Dia</label>
+                <select onchange="updateBeam(${idx}, 'stDia', +this.value)">
+                  <option value="8" ${b.stDia === 8 ? 'selected' : ''}>8 mm</option>
+                  <option value="10" ${b.stDia === 10 ? 'selected' : ''}>10 mm</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Stirrups Spacing</label>
+                <select onchange="updateBeam(${idx}, 'stSp', +this.value)">${spacingOptionsHTML(b.stSp, [4, 5, 6, 7, 8])}</select>
+              </div>
+            </div>
+          </div>
+          <div class="member-footer" id="beamMeta_${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    function addBeamBBS() {
+      const n = bbsData.beams.length + 1;
+      bbsData.beams.push({
+        id: Date.now(),
+        name: `B${n}`,
+        W: 9,
+        D: 15,
+        L: 14,
+        nos: 2,
+        topQty: 2,
+        topDia: 12,
+        botQty: 3,
+        botDia: 12,
+        topLeftQty: 1,
+        topLeftDia: 12,
+        topRightQty: 1,
+        topRightDia: 12,
+        botMidQty: 0,
+        botMidDia: 12,
+        crankQty: 0,
+        crankDia: 12,
+        stDia: 8,
+        stSp: 6
+      });
+      renderBeamsBBS();
+      recalcAllBBS();
+    }
+
+    function removeBeam(idx) {
+      bbsData.beams.splice(idx, 1);
+      renderBeamsBBS();
+      recalcAllBBS();
+    }
+
+    function updateBeam(idx, key, val) {
+      bbsData.beams[idx][key] = val;
+      recalcAllBBS();
+    }
+
+    /* Render Slabs */
+    function renderSlabsBBS() {
+      const container = document.getElementById('slabBBSList');
+      if (!bbsData.slabs.length) {
+        container.innerHTML = '<div style="font-size:13px; color:var(--text-muted);">No slabs added. Click "+ Add Slab" above.</div>';
+        return;
+      }
+      container.innerHTML = bbsData.slabs.map((s, idx) => `
+        <div class="member-box">
+          <div class="member-top">
+            <input class="member-name-input" type="text" value="${s.name}" oninput="updateSlab(${idx}, 'name', this.value)" />
+            <button class="btn btn-danger-soft" onclick="removeSlab(${idx})">Remove</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Total Slab Area (Sq. Ft.)</label>
+              <input type="number" value="${s.area}" step="10" min="10" oninput="updateSlab(${idx}, 'area', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Slab Design Type</label>
+              <select onchange="updateSlab(${idx}, 'type', this.value)">
+                <option value="two" ${s.type === 'two' ? 'selected' : ''}>Two-Way Slab (Both Main Cranked)</option>
+                <option value="one" ${s.type === 'one' ? 'selected' : ''}>One-Way Slab (Main + Distribution)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Slab Thickness (inch)</label>
+              <input type="number" value="${s.thick}" step="0.5" min="4" oninput="updateSlab(${idx}, 'thick', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Main Crank Bar Dia</label>
+              <select onchange="updateSlab(${idx}, 'mainDia', +this.value)">
+                <option value="10" ${s.mainDia === 10 ? 'selected' : ''}>10 mm</option>
+                <option value="8" ${s.mainDia === 8 ? 'selected' : ''}>8 mm</option>
+                <option value="12" ${s.mainDia === 12 ? 'selected' : ''}>12 mm</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Main Bar Spacing</label>
+              <select onchange="updateSlab(${idx}, 'mainSp', +this.value)">${spacingOptionsHTML(s.mainSp, [5, 6, 7, 8])}</select>
+            </div>
+            <div class="form-group">
+              <label>Distribution / Top Bar Dia &amp; Sp</label>
+              <div class="input-inline">
+                <select style="width:50%;" onchange="updateSlab(${idx}, 'distDia', +this.value)">
+                  <option value="8" ${s.distDia === 8 ? 'selected' : ''}>8 mm</option>
+                  <option value="10" ${s.distDia === 10 ? 'selected' : ''}>10 mm</option>
+                </select>
+                <select style="width:50%;" onchange="updateSlab(${idx}, 'distSp', +this.value)">${spacingOptionsHTML(s.distSp, [6, 7, 8, 9])}</select>
+              </div>
+            </div>
+          </div>
+          <div class="member-footer" id="slabMeta_${idx}"></div>
+        </div>
+      `).join('');
+    }
+
+    function addSlabBBS() {
+      const n = bbsData.slabs.length + 1;
+      bbsData.slabs.push({ id: Date.now(), name: `Slab ${n}`, area: 800, thick: 5, type: 'two', mainDia: 10, mainSp: 6, distDia: 8, distSp: 7 });
+      renderSlabsBBS();
+      recalcAllBBS();
+    }
+
+    function removeSlab(idx) {
+      bbsData.slabs.splice(idx, 1);
+      renderSlabsBBS();
+      recalcAllBBS();
+    }
+
+    function updateSlab(idx, key, val) {
+      bbsData.slabs[idx][key] = val;
+      recalcAllBBS();
+    }
+
+    /* Master BBS Recalculation */
+    function recalcAllBBS() {
+      const barLenFt = getStandardBarLenFt();
+      const wastagePct = parseFloat(document.getElementById('bbsWastage').value) || 0;
+      const rateKg = parseFloat(document.getElementById('bbsRateKg').value) || 0;
+      const wasteMult = 1 + wastagePct / 100;
+
+      const netLenByDia = { 8: 0, 10: 0, 12: 0, 16: 0, 20: 0, 25: 0 };
+      const beamLenByDia = { 8: 0, 10: 0, 12: 0, 16: 0, 20: 0, 25: 0 };
+
+      function addLength(dia, ft, isBeam = false) {
+        if (!netLenByDia.hasOwnProperty(dia)) netLenByDia[dia] = 0;
+        netLenByDia[dia] += Math.max(0, ft);
+        if (isBeam) beamLenByDia[dia] += Math.max(0, ft);
+      }
+
+      /* 1. Footings */
+      bbsData.footings.forEach((f, idx) => {
+        const L = Math.max(0, f.L);
+        const B = Math.max(0, f.B);
+        const H = Math.max(4, f.H);
+        const nos = Math.max(0, f.nos);
+        const bendIn = Math.max(3, H - 4); // Auto L-bend from footing height minus 2" top & 2" bottom cover
+        const lenX = Math.max(0.5, B - 4 / 12) + (2 * bendIn) / 12;
+        const lenY = Math.max(0.5, L - 4 / 12) + (2 * bendIn) / 12;
+        const cntX = Math.floor((L * 12 - 4) / f.spX) + 1;
+        const cntY = Math.floor((B * 12 - 4) / f.spY) + 1;
+        const meshMult = f.topMesh ? 2 : 1;
+
+        const totXFt = lenX * cntX * nos * meshMult;
+        const totYFt = lenY * cntY * nos * meshMult;
+        addLength(f.diaX, totXFt);
+        addLength(f.diaY, totYFt);
+
+        let chairKg = 0;
+        if (f.topMesh && nos > 0) {
+          const chairsPerFtg = Math.max(2, Math.ceil((L * B) / 10));
+          const chairLenFt = (2 * Math.max(4, H - 4) + 18) / 12;
+          const totChairFt = chairsPerFtg * chairLenFt * nos;
+          addLength(12, totChairFt);
+          chairKg = totChairFt * kgPerFoot(12);
+        }
+
+        const ftgKg = totXFt * kgPerFoot(f.diaX) + totYFt * kgPerFoot(f.diaY) + chairKg;
+        const metaEl = document.getElementById(`footingMeta_${idx}`);
+        if (metaEl) {
+          metaEl.innerHTML = `
+            <span>Auto Cover: <strong>50mm (2")</strong> • Auto L-Bend: <strong>${bendIn.toFixed(1)}"</strong> each end</span>
+            <span>Subtotal: <strong>${fmt(ftgKg, 1)} kg</strong></span>
+          `;
+        }
+      });
+
+      /* 2. Columns */
+      bbsData.columns.forEach((c, idx) => {
+        const W = Math.max(4, c.W);
+        const D = Math.max(4, c.D);
+        const H = Math.max(0, c.H);
+        const nos = Math.max(0, c.nos);
+        let colKg = 0;
+
+        c.bars.forEach(b => {
+          const lapFt = c.lapL ? 1.0 + (50 * b.dia) / 304.8 : 0;
+          const singleLen = H + lapFt;
+          const totFt = singleLen * Math.max(0, b.qty) * nos;
+          addLength(b.dia, totFt);
+          colKg += totFt * kgPerFoot(b.dia);
+        });
+
+        // Stirrups (40mm cover = 1.575" each side => 3.15" total; 135 deg hook = 20d)
+        const stCount = Math.floor((H * 12) / c.stSp) + 1;
+        const coreA = Math.max(2, W - 3.15);
+        const coreB = Math.max(2, D - 3.15);
+        const hookIn = (20 * c.stDia) / 25.4;
+        const stCutFt = (2 * (coreA + coreB) + hookIn) / 12;
+        const totStFt = stCutFt * stCount * nos;
+        addLength(c.stDia, totStFt);
+        colKg += totStFt * kgPerFoot(c.stDia);
+
+        const metaEl = document.getElementById(`columnMeta_${idx}`);
+        if (metaEl) {
+          metaEl.innerHTML = `
+            <span>Stirrups: <strong>${stCount * nos} nos</strong> (${fmt(stCutFt, 2)} ft cut len incl. 135° hooks)</span>
+            <span>Subtotal: <strong>${fmt(colKg, 1)} kg</strong></span>
+          `;
+        }
+      });
+
+      /* 3. Beams */
+      let allBeamsNetKg = 0;
+      bbsData.beams.forEach((b, idx) => {
+        const W = Math.max(4, b.W);
+        const D = Math.max(4, b.D);
+        const L = Math.max(0, b.L);
+        const nos = Math.max(0, b.nos);
+        let bKg = 0;
+
+        const addBeamBar = (qty, dia, lenFt) => {
+          const totFt = Math.max(0, qty) * nos * Math.max(0, lenFt);
+          addLength(dia, totFt, true);
+          bKg += totFt * kgPerFoot(dia);
+        };
+
+        // Top & Bottom through bars (+ 40d anchorage each end)
+        addBeamBar(b.topQty, b.topDia, L + (2 * 40 * b.topDia) / 304.8);
+        addBeamBar(b.botQty, b.botDia, L + (2 * 40 * b.botDia) / 304.8);
+
+        // Top Left & Right Curtail Extra (0.30L + 40d)
+        addBeamBar(b.topLeftQty, b.topLeftDia, 0.30 * L + (40 * b.topLeftDia) / 304.8);
+        addBeamBar(b.topRightQty, b.topRightDia, 0.30 * L + (40 * b.topRightDia) / 304.8);
+
+        // Bottom Mid-span Extra (0.70L)
+        addBeamBar(b.botMidQty, b.botMidDia, 0.70 * L);
+
+        // Crank / Bent-up Bars (+ 2 * 0.42 * d_eff)
+        const dEffFt = Math.max(0.3, (D - 2.5) / 12);
+        addBeamBar(b.crankQty, b.crankDia, L + (2 * 40 * b.crankDia) / 304.8 + 2 * 0.42 * dEffFt);
+
+        // Stirrups (25mm cover = 0.984" each side => 1.97" total)
+        const stCount = Math.floor((L * 12) / b.stSp) + 1;
+        const coreA = Math.max(2, W - 1.97);
+        const coreB = Math.max(2, D - 1.97);
+        const hookIn = (20 * b.stDia) / 25.4;
+        const stCutFt = (2 * (coreA + coreB) + hookIn) / 12;
+        addBeamBar(stCount, b.stDia, stCutFt);
+
+        allBeamsNetKg += bKg;
+        const metaEl = document.getElementById(`beamMeta_${idx}`);
+        if (metaEl) {
+          metaEl.innerHTML = `
+            <span>Stirrups: <strong>${stCount * nos} nos</strong> • Span: <strong>${L} ft × ${nos}</strong></span>
+            <span>Beam Subtotal: <strong>${fmt(bKg, 1)} kg</strong></span>
+          `;
+        }
+      });
+
+      // Update Beam Subtotal Banner
+      let beamGrossKg = 0;
+      let beamFullBars = 0;
+      DIA_LIST.forEach(d => {
+        const gLen = beamLenByDia[d] * wasteMult;
+        beamGrossKg += gLen * kgPerFoot(d);
+        if (gLen > 0) beamFullBars += Math.ceil(gLen / barLenFt);
+      });
+      document.getElementById('beamSubDetails').textContent =
+        `Net: ${fmt(allBeamsNetKg, 1)} kg | With Wastage: ${fmt(beamGrossKg, 1)} kg (${fmt(beamGrossKg / 1000, 3)} MT)`;
+      document.getElementById('beamSubBarsBadge').textContent = `${beamFullBars} Full Bars (${barLenFt}ft)`;
+
+      /* 4. Slabs */
+      bbsData.slabs.forEach((s, idx) => {
+        const area = Math.max(0, s.area);
+        const thick = Math.max(3, s.thick);
+        const span = Math.sqrt(area);
+        const dEffFt = Math.max(0.2, (thick - 1.5) / 12);
+        let slabKg = 0;
+
+        if (s.type === 'two') {
+          // Two-way: cranked bars in both directions + top extra strips at edges
+          const barsOneDir = Math.floor((span * 12) / s.mainSp) + 1;
+          const crankBarLen = span + 0.42 * dEffFt + 0.5;
+          const totMainFt = barsOneDir * 2 * crankBarLen;
+          addLength(s.mainDia, totMainFt);
+          slabKg += totMainFt * kgPerFoot(s.mainDia);
+
+          // Top extra edge bars (0.25L strips along 4 edges)
+          const topBarsEdge = Math.floor((span * 12) / s.distSp) + 1;
+          const totTopFt = topBarsEdge * 4 * (0.25 * span + 0.4);
+          addLength(s.distDia, totTopFt);
+          slabKg += totTopFt * kgPerFoot(s.distDia);
+        } else {
+          // One-way: main cranked bars in short dir + full distribution bars + top support bars
+          const mainBars = Math.floor((span * 12) / s.mainSp) + 1;
+          const mainLen = span + 0.42 * dEffFt + 0.5;
+          const totMainFt = mainBars * mainLen;
+          addLength(s.mainDia, totMainFt);
+          slabKg += totMainFt * kgPerFoot(s.mainDia);
+
+          const distBars = Math.floor((span * 12) / s.distSp) + 1;
+          const totDistFt = distBars * (span + 0.4) + (mainBars * 2 * (0.25 * span));
+          addLength(s.distDia, totDistFt);
+          slabKg += totDistFt * kgPerFoot(s.distDia);
+        }
+
+        const metaEl = document.getElementById(`slabMeta_${idx}`);
+        if (metaEl) {
+          metaEl.innerHTML = `
+            <span>Area: <strong>${fmtInt(area)} sq.ft</strong> • Mode: <strong>${s.type === 'two' ? 'Two-Way' : 'One-Way'}</strong></span>
+            <span>Subtotal: <strong>${fmt(slabKg, 1)} kg</strong></span>
+          `;
+        }
+      });
+
+      /* 5. Build Diameter-Wise Order Table */
+      let grandNetLen = 0;
+      let grandGrossLen = 0;
+      let grandFullBars = 0;
+      let grandNetKg = 0;
+      let grandOrderKg = 0;
+      const rowsHTML = [];
+      const activeSizes = [];
+
+      DIA_LIST.forEach(d => {
+        const uWt = kgPerFoot(d);
+        const wtPerFullBar = uWt * barLenFt;
+        const netLen = netLenByDia[d] || 0;
+        const grossLen = netLen * wasteMult;
+        const exactBars = grossLen / barLenFt;
+        const fullBars = grossLen > 0.001 ? Math.ceil(exactBars) : 0;
+        const netKg = netLen * uWt;
+        const orderKg = fullBars * wtPerFullBar;
+        const offCutFt = fullBars > 0 ? fullBars * barLenFt - grossLen : 0;
+
+        grandNetLen += netLen;
+        grandGrossLen += grossLen;
+        grandFullBars += fullBars;
+        grandNetKg += netKg;
+        grandOrderKg += orderKg;
+
+        if (fullBars > 0) {
+          activeSizes.push({ dia: d, fullBars, netKg, orderKg });
+        }
+
+        rowsHTML.push(`
+          <tr style="${fullBars === 0 ? 'opacity:0.45;' : ''}">
+            <td><strong>${d} mm</strong></td>
+            <td class="num">${fmt(wtPerFullBar, 2)}</td>
+            <td class="num">${fmt(netLen, 1)}</td>
+            <td class="num">${fmt(grossLen, 1)}</td>
+            <td class="num">${fmt(exactBars, 2)}</td>
+            <td class="num" style="color:var(--emerald); font-weight:800;">${fullBars} Bars</td>
+            <td class="num">${fmt(netKg, 1)}</td>
+            <td class="num" style="font-weight:700;">${fmt(orderKg, 1)}</td>
+            <td class="num">${fmt(offCutFt, 1)}</td>
+          </tr>
+        `);
+      });
+
+      rowsHTML.push(`
+        <tr class="total-row">
+          <td>GRAND TOTAL</td>
+          <td class="num">—</td>
+          <td class="num">${fmt(grandNetLen, 1)} ft</td>
+          <td class="num">${fmt(grandGrossLen, 1)} ft</td>
+          <td class="num">${fmt(grandGrossLen / barLenFt, 2)}</td>
+          <td class="num" style="color:#34d399;">${grandFullBars} Bars</td>
+          <td class="num">${fmt(grandNetKg, 1)} kg</td>
+          <td class="num" style="color:#fbbf24;">${fmt(grandOrderKg, 1)} kg</td>
+          <td class="num">—</td>
+        </tr>
+      `);
+
+      document.getElementById('bbsOrderTableBody').innerHTML = rowsHTML.join('');
+
+      // Update KPI Cards
+      const grandCost = grandOrderKg * rateKg;
+      document.getElementById('kpiTotalBars').textContent = `${grandFullBars} Bars`;
+      document.getElementById('kpiBarLenSub').textContent = `@ ${barLenFt} ft/bar (${wastagePct}% wastage)`;
+      document.getElementById('kpiOrderKg').textContent = `${fmt(grandOrderKg, 1)} kg`;
+      document.getElementById('kpiOrderMt').textContent = `${fmt(grandOrderKg / 1000, 3)} MT (Full Bars)`;
+      document.getElementById('kpiNetKg').textContent = `${fmt(grandNetKg, 1)} kg`;
+      document.getElementById('kpiGrossKg').textContent = `With Wastage: ${fmt(grandNetKg * wasteMult, 1)} kg`;
+      document.getElementById('kpiTotalCost').textContent = `₹${fmtInt(grandCost)}`;
+      document.getElementById('kpiCostNote').textContent = `@ ₹${rateKg}/kg on order weight`;
+
+      lastBBSOrderSummary = {
+        barLenFt,
+        wastagePct,
+        grandFullBars,
+        grandNetKg,
+        grandOrderKg,
+        grandCost,
+        activeSizes
+      };
+    }
+
+    function copyBBSWhatsApp() {
+      if (!lastBBSOrderSummary) return;
+      const s = lastBBSOrderSummary;
+      const lines = [
+        `*BUILD SMART — TMT STEEL ORDER (${s.barLenFt}ft Bars)*`,
+        `Wastage Included: +${s.wastagePct}%`,
+        `------------------------`,
+        ...s.activeSizes.map(x => `• *${x.dia}mm:* ${x.fullBars} Bars (${fmt(x.orderKg, 1)} kg)`),
+        `------------------------`,
+        `*Total Full Bars:* ${s.grandFullBars} Nos (${s.barLenFt} ft)`,
+        `*Total Order Weight:* ${fmt(s.grandOrderKg, 1)} kg (${fmt(s.grandOrderKg / 1000, 3)} MT)`,
+        `*Net BBS Weight:* ${fmt(s.grandNetKg, 1)} kg`,
+        `*Est. TMT Cost:* ₹${fmtInt(s.grandCost)}`
+      ];
+      copyText(lines.join('\n'));
+    }
+
+    /* ==========================================================================
+       3. TAB 2: INSTANT CALCULATOR (RCC + BRICKWALL)
+       ========================================================================== */
+    function calcInstantRCC() {
+      const L = Math.max(0, parseFloat(document.getElementById('instRccL').value) || 0);
+      const B = Math.max(0, parseFloat(document.getElementById('instRccB').value) || 0);
+      const Hraw = Math.max(0, parseFloat(document.getElementById('instRccH').value) || 0);
+      const unit = document.getElementById('instRccHUnit').value;
+      const nos = Math.max(0, parseFloat(document.getElementById('instRccNos').value) || 0);
+      const grade = document.getElementById('instRccGrade').value;
+      const steelPct = Math.max(0, parseFloat(document.getElementById('instRccSteelPct').value) || 0);
+
+      const Hft = unit === 'inch' ? Hraw / 12 : Hraw;
+      const wetCft = L * B * Hft * nos;
+      const wetM3 = wetCft / 35.3147;
+      const dryM3 = wetM3 * 1.54;
+
+      const ratio = grade === 'M25' ? { c: 1, s: 1, a: 2, sum: 4 } : { c: 1, s: 1.5, a: 3, sum: 5.5 };
+      const cementM3 = dryM3 * (ratio.c / ratio.sum);
+      const cementBags = (cementM3 * 1440) / 50;
+      const sandCft = dryM3 * (ratio.s / ratio.sum) * 35.3147;
+      const aggCft = dryM3 * (ratio.a / ratio.sum) * 35.3147;
+      const steelKg = wetM3 * (steelPct / 100) * 7850;
+
+      document.getElementById('instRccCement').textContent = `${fmt(cementBags, 1)} Bags`;
+      document.getElementById('instRccVolSub').textContent = `Wet Vol: ${fmt(wetM3, 2)} m³ (${fmt(wetCft, 1)} cft)`;
+      document.getElementById('instRccSand').textContent = `${fmt(sandCft, 1)} CFT`;
+      document.getElementById('instRccAgg').textContent = `${fmt(aggCft, 1)} CFT`;
+      document.getElementById('instRccSteel').textContent = `${fmt(steelKg, 1)} kg`;
+      document.getElementById('instRccSteelSub').textContent = `@ ${steelPct}% of RCC Vol (${grade})`;
+    }
+
+    function copyInstantRCC() {
+      const L = document.getElementById('instRccL').value;
+      const B = document.getElementById('instRccB').value;
+      const H = document.getElementById('instRccH').value;
+      const U = document.getElementById('instRccHUnit').value;
+      const grade = document.getElementById('instRccGrade').value;
+      const text = [
+        `*INSTANT RCC ESTIMATE (${grade})*`,
+        `Size: ${L}ft × ${B}ft × ${H}${U}`,
+        `• Cement: ${document.getElementById('instRccCement').textContent}`,
+        `• Sand: ${document.getElementById('instRccSand').textContent}`,
+        `• Aggregate: ${document.getElementById('instRccAgg').textContent}`,
+        `• TMT Steel: ${document.getElementById('instRccSteel').textContent}`
+      ].join('\n');
+      copyText(text);
+    }
+
+    function calcInstantBrick() {
+      const brickType = document.getElementById('instBrickType').value; // '200' or '230'
+      const wallType = document.getElementById('instWallType').value;   // 'full' or 'half'
+      const L = Math.max(0, parseFloat(document.getElementById('instWallL').value) || 0);
+      const H = Math.max(0, parseFloat(document.getElementById('instWallH').value) || 0);
+      const deduct = Math.max(0, parseFloat(document.getElementById('instWallDeduct').value) || 0);
+
+      const netSqft = Math.max(0, L * H - deduct);
+      const areaM2 = netSqft * 0.092903;
+
+      let wallThickM, nomBrickVolM3, actualBrickVolM3;
+      if (brickType === '200') {
+        // 200mm x 100mm x 100mm (+10mm mortar => 210x110x110)
+        wallThickM = wallType === 'half' ? 0.10 : 0.20;
+        nomBrickVolM3 = 0.21 * 0.11 * 0.11;
+        actualBrickVolM3 = 0.20 * 0.10 * 0.10;
+      } else {
+        // 230mm x 75mm x 115mm (+10mm mortar => 240x85x125)
+        wallThickM = wallType === 'half' ? 0.115 : 0.230;
+        nomBrickVolM3 = 0.24 * 0.085 * 0.125;
+        actualBrickVolM3 = 0.23 * 0.075 * 0.115;
+      }
+
+      const wallVolM3 = areaM2 * wallThickM;
+      const netBricks = wallVolM3 / nomBrickVolM3;
+      const bricksWithWaste = Math.ceil(netBricks * 1.05);
+
+      const wetMortarM3 = Math.max(0, wallVolM3 - netBricks * actualBrickVolM3);
+      const dryMortarM3 = wetMortarM3 * 1.33; // 33% bulkage & frog filling
+
+      // 1:4 Mortar (sum = 5)
+      const c14Bags = ((dryMortarM3 * (1 / 5)) * 1440) / 50;
+      const s14Cft = dryMortarM3 * (4 / 5) * 35.3147;
+
+      // 1:5 Mortar (sum = 6)
+      const c15Bags = ((dryMortarM3 * (1 / 6)) * 1440) / 50;
+      const s15Cft = dryMortarM3 * (5 / 6) * 35.3147;
+
+      document.getElementById('instBrickCount').textContent = `${fmtInt(bricksWithWaste)} Bricks`;
+      document.getElementById('instBrickSub').textContent =
+        `Net Area: ${fmt(netSqft, 1)} sq.ft • Net Bricks: ${fmtInt(netBricks)} (+5% wastage)`;
+
+      document.getElementById('mortar14Cement').textContent = `${fmt(c14Bags, 1)} Bags Cement`;
+      document.getElementById('mortar14Sand').textContent = `${fmt(s14Cft, 1)} CFT Sand`;
+
+      document.getElementById('mortar15Cement').textContent = `${fmt(c15Bags, 1)} Bags Cement`;
+      document.getElementById('mortar15Sand').textContent = `${fmt(s15Cft, 1)} CFT Sand`;
+    }
+
+    function copyInstantBrick() {
+      const bLabel = document.getElementById('instBrickType').selectedOptions[0].text;
+      const wLabel = document.getElementById('instWallType').selectedOptions[0].text;
+      const text = [
+        `*INSTANT BRICKWALL ESTIMATE*`,
+        `Brick: ${bLabel}`,
+        `Wall: ${wLabel}`,
+        `• Bricks (+5%): ${document.getElementById('instBrickCount').textContent}`,
+        `• Option A (1:4 Mortar): ${document.getElementById('mortar14Cement').textContent}, ${document.getElementById('mortar14Sand').textContent}`,
+        `• Option B (1:5 Mortar): ${document.getElementById('mortar15Cement').textContent}, ${document.getElementById('mortar15Sand').textContent}`
+      ].join('\n');
+      copyText(text);
+    }
+
+    /* ==========================================================================
+       4. TAB 3: DETAILED RCC CALCULATOR
+       ========================================================================== */
+    let detRccItems = [
+      { id: 1, type: 'Footing', label: 'F1 Footing', L: 5, B: 5, H: 15, nos: 8, pct: 0.8 },
+      { id: 2, type: 'Column', label: 'C1 Column', L: 0.75, B: 1.25, H: 132, nos: 8, pct: 1.2 },
+      { id: 3, type: 'Beam', label: 'Plinth & Roof Beam', L: 140, B: 0.75, H: 15, nos: 1, pct: 1.2 },
+      { id: 4, type: 'Slab', label: 'Roof Slab', L: 40, B: 25, H: 5, nos: 1, pct: 0.8 }
+    ];
+
+    function renderDetRccRows() {
+      const box = document.getElementById('detRccRows');
+      box.innerHTML = detRccItems.map((it, idx) => `
+        <div class="member-box">
+          <div class="member-top">
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span class="tag tag-emerald">${it.type}</span>
+              <input class="member-name-input" type="text" value="${it.label}" oninput="updateDetRcc(${idx}, 'label', this.value)" />
+            </div>
+            <button class="btn btn-danger-soft" onclick="removeDetRcc(${idx})">Remove</button>
+          </div>
+          <div class="grid-4" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+            <div class="form-group">
+              <label>Length (ft)</label>
+              <input type="number" value="${it.L}" step="0.1" min="0" oninput="updateDetRcc(${idx}, 'L', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Breadth (ft)</label>
+              <input type="number" value="${it.B}" step="0.05" min="0" oninput="updateDetRcc(${idx}, 'B', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Height/Thick (inch)</label>
+              <input type="number" value="${it.H}" step="0.5" min="0" oninput="updateDetRcc(${idx}, 'H', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Nos.</label>
+              <input type="number" value="${it.nos}" step="1" min="1" oninput="updateDetRcc(${idx}, 'nos', +this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Steel %</label>
+              <input type="number" value="${it.pct}" step="0.1" min="0" oninput="updateDetRcc(${idx}, 'pct', +this.value)" />
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addDetRccRow(type) {
+      const defaults = {
+        Footing: { L: 4.5, B: 4.5, H: 14, nos: 4, pct: 0.8 },
+        Column: { L: 0.75, B: 1.0, H: 132, nos: 4, pct: 1.0 },
+        Beam: { L: 60, B: 0.75, H: 15, nos: 1, pct: 1.2 },
+        Slab: { L: 30, B: 20, H: 5, nos: 1, pct: 0.8 }
+      }[type];
+      detRccItems.push({ id: Date.now(), type, label: `${type} Extra`, ...defaults });
+      renderDetRccRows();
+      recalcDetailedRCC();
+    }
+
+    function removeDetRcc(idx) {
+      detRccItems.splice(idx, 1);
+      renderDetRccRows();
+      recalcDetailedRCC();
+    }
+
+    function updateDetRcc(idx, key, val) {
+      detRccItems[idx][key] = val;
+      recalcDetailedRCC();
+    }
+
+    function recalcDetailedRCC() {
+      const grade = document.getElementById('detRccGrade').value;
+      const waste = 1 + (parseFloat(document.getElementById('detRccWastage').value) || 0) / 100;
+      const ratio = grade === 'M25' ? { c: 1, s: 1, a: 2, sum: 4 } : { c: 1, s: 1.5, a: 3, sum: 5.5 };
+
+      let totVol = 0, totCem = 0, totSand = 0, totAgg = 0, totSteel = 0;
+      const rows = detRccItems.map(it => {
+        const wetCft = it.L * it.B * (it.H / 12) * it.nos * waste;
+        const wetM3 = wetCft / 35.3147;
+        const dryM3 = wetM3 * 1.54;
+        const cem = ((dryM3 * (ratio.c / ratio.sum)) * 1440) / 50;
+        const sand = dryM3 * (ratio.s / ratio.sum) * 35.3147;
+        const agg = dryM3 * (ratio.a / ratio.sum) * 35.3147;
+        const steel = wetM3 * (it.pct / 100) * 7850;
+
+        totVol += wetM3;
+        totCem += cem;
+        totSand += sand;
+        totAgg += agg;
+        totSteel += steel;
+
+        return `
+          <tr>
+            <td><strong>${it.label}</strong> <span style="color:var(--text-muted); font-size:11px;">(${it.type})</span></td>
+            <td class="num">${fmt(wetM3, 2)}</td>
+            <td class="num">${fmt(cem, 1)}</td>
+            <td class="num">${fmt(sand, 1)}</td>
+            <td class="num">${fmt(agg, 1)}</td>
+            <td class="num">${fmt(steel, 1)}</td>
+          </tr>
+        `;
+      });
+
+      rows.push(`
+        <tr class="total-row">
+          <td>TOTAL (${grade})</td>
+          <td class="num">${fmt(totVol, 2)} m³</td>
+          <td class="num">${fmt(totCem, 1)} Bags</td>
+          <td class="num">${fmt(totSand, 1)} CFT</td>
+          <td class="num">${fmt(totAgg, 1)} CFT</td>
+          <td class="num">${fmt(totSteel, 1)} kg</td>
+        </tr>
+      `);
+
+      document.getElementById('detRccTableBody').innerHTML = rows.join('');
+      document.getElementById('detTotCement').textContent = `${fmt(totCem, 1)} Bags`;
+      document.getElementById('detTotVol').textContent = `Wet RCC: ${fmt(totVol, 2)} m³`;
+      document.getElementById('detTotSand').textContent = `${fmt(totSand, 1)} CFT`;
+      document.getElementById('detTotAgg').textContent = `${fmt(totAgg, 1)} CFT`;
+      document.getElementById('detTotSteel').textContent = `${fmt(totSteel, 1)} kg`;
+      document.getElementById('detTotSteelMt').textContent = `${fmt(totSteel / 1000, 3)} MT`;
+    }
+
+    function copyDetailedRCC() {
+      const grade = document.getElementById('detRccGrade').value;
+      const text = [
+        `*DETAILED RCC BOQ (${grade})*`,
+        `• Cement: ${document.getElementById('detTotCement').textContent}`,
+        `• Sand: ${document.getElementById('detTotSand').textContent}`,
+        `• Aggregate: ${document.getElementById('detTotAgg').textContent}`,
+        `• TMT Steel: ${document.getElementById('detTotSteel').textContent} (${document.getElementById('detTotSteelMt').textContent})`
+      ].join('\n');
+      copyText(text);
+    }
+
+    /* ==========================================================================
+       5. TAB 4, 5, 6: AI SELF-CALIBRATING ESTIMATOR & TRAINING ENGINE
+       ========================================================================== */
+    const STORAGE_KEY = 'buildsmart_ai_training_v1';
+
+    const BASE_RATES = {
+      cement: { name: 'Cement (50kg OPC/PPC)', unit: 'Bags', base: 0.42, price: 360 },
+      steel:  { name: 'TMT Steel Bars', unit: 'KG', base: 3.80, price: 62 },
+      sand:   { name: 'River / M-Sand', unit: 'CFT', base: 1.85, price: 48 },
+      agg:    { name: 'Coarse Aggregate (20mm)', unit: 'CFT', base: 1.35, price: 38 },
+      bricks: { name: 'Red / Fly-Ash Bricks', unit: 'Nos', base: 20.5, price: 7.5 },
+      tiles:  { name: 'Floor & Wall Tiles', unit: 'Sq.ft', base: 1.20, price: 55 },
+      paint:  { name: 'Putty & Paint Equiv.', unit: 'Liters', base: 0.18, price: 240 }
+    };
+
+    const MULTIPLIERS = {
+      floors: { G: 0.94, 'G+1': 1.0, 'G+2': 1.06, 'G+3': 1.12 },
+      structure: { rcc: 1.0, load: 0.86 },
+      foundation: { normal: 1.0, deep: 1.09 },
+      finish: { basic: 0.88, standard: 1.0, premium: 1.18 }
+    };
+
+    function getTrainingSites() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setTrainingSites(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      refreshAllAI();
+    }
+
+    function getCompositeMultiplier(floors, structure, foundation, finish, key) {
+      const fM = MULTIPLIERS.floors[floors] || 1.0;
+      const sM = MULTIPLIERS.structure[structure] || 1.0;
+      const fdM = MULTIPLIERS.foundation[foundation] || 1.0;
+      const fnM = MULTIPLIERS.finish[finish] || 1.0;
+
+      // Structural items respond to floors/structure/foundation; finishing items respond to finishing grade
+      if (key === 'tiles' || key === 'paint') {
+        return fnM;
+      }
+      if (key === 'bricks') {
+        return structure === 'load' ? 1.18 : 1.0;
+      }
+      return fM * sM * fdM;
+    }
+
+    function getCalibratedRates() {
+      const sites = getTrainingSites();
+      const learned = {};
+      Object.keys(BASE_RATES).forEach(k => {
+        learned[k] = BASE_RATES[k].base;
+      });
+
+      if (!sites.length) return { rates: learned, count: 0 };
+
+      // Weighted calibration: each site contributes up to weight 1.0 (total training weight capped at 85% vs 15% book prior)
+      const siteWeight = Math.min(0.85, sites.length * 0.22);
+      const priorWeight = 1 - siteWeight;
+
+      Object.keys(BASE_RATES).forEach(k => {
+        let sumNormalized = 0;
+        let validCount = 0;
+        sites.forEach(s => {
+          const area = Math.max(100, Number(s.area) || 1000);
+          const actualVal = Number(s[k]) || 0;
+          if (actualVal > 0) {
+            const mult = getCompositeMultiplier(s.floors, s.structure, s.foundation, s.finish, k);
+            const normalizedPerSqft = actualVal / area / mult;
+            sumNormalized += normalizedPerSqft;
+            validCount++;
+          }
+        });
+        if (validCount > 0) {
+          const avgLearned = sumNormalized / validCount;
+          learned[k] = priorWeight * BASE_RATES[k].base + siteWeight * avgLearned;
+        }
+      });
+
+      return { rates: learned, count: sites.length };
+    }
+
+    let lastAIBOQ = null;
+
+    function calcAIBOQ() {
+      const area = Math.max(100, parseFloat(document.getElementById('aiArea').value) || 1000);
+      const floors = document.getElementById('aiFloors').value;
+      const structure = document.getElementById('aiStructure').value;
+      const foundation = document.getElementById('aiFoundation').value;
+      const finish = document.getElementById('aiFinish').value;
+
+      const { rates, count } = getCalibratedRates();
+      const marginPct = Math.max(4, 12 - count * 2); // Tightens from ±12% down to ±4% as projects train
+
+      document.getElementById('headerCalibStatus').textContent =
+        count > 0 ? `Calibrated • ${count} Trained Site${count > 1 ? 's' : ''}` : 'Offline Ready • 0 Trained Sites';
+      document.getElementById('aiAccuracyTag').textContent =
+        count > 0 ? `Calibrated (${count} Sites • ±${marginPct}%)` : `Base Thumb-Rules (±${marginPct}%)`;
+      document.getElementById('aiModelSourceNote').textContent =
+        count > 0 ? `Calibrated from ${count} saved project(s)` : 'Source: IS Base Thumb-Rules';
+
+      let grandCost = 0;
+      const rows = [];
+      const summaryItems = [];
+
+      Object.keys(BASE_RATES).forEach(k => {
+        const meta = BASE_RATES[k];
+        const mult = getCompositeMultiplier(floors, structure, foundation, finish, k);
+        const effRatePerSqft = rates[k] * mult;
+        const qty = area * effRatePerSqft;
+        const minQty = qty * (1 - marginPct / 100);
+        const maxQty = qty * (1 + marginPct / 100);
+        const amount = qty * meta.price;
+        grandCost += amount;
+
+        const isInt = meta.unit === 'Bags' || meta.unit === 'Bricks' || meta.unit === 'Nos';
+        const qStr = isInt ? `${fmtInt(qty)} ${meta.unit}` : `${fmt(qty, 1)} ${meta.unit}`;
+        const rStr = isInt
+          ? `${fmtInt(minQty)} – ${fmtInt(maxQty)}`
+          : `${fmt(minQty, 0)} – ${fmt(maxQty, 0)}`;
+
+        summaryItems.push({ name: meta.name, qStr, amount });
+
+        rows.push(`
+          <tr>
+            <td><strong>${meta.name}</strong></td>
+            <td class="num">${fmt(effRatePerSqft, 2)} /sq.ft</td>
+            <td class="num" style="color:var(--emerald); font-weight:800;">${qStr}</td>
+            <td class="num" style="color:var(--text-secondary);">${rStr}</td>
+            <td class="num">₹${meta.price}</td>
+            <td class="num" style="font-weight:700;">₹${fmtInt(amount)}</td>
+          </tr>
+        `);
+      });
+
+      document.getElementById('aiBoqTableBody').innerHTML = rows.join('');
+      document.getElementById('aiGrandCost').textContent = `₹${fmtInt(grandCost)}`;
+
+      lastAIBOQ = { area, floors, structure, foundation, finish, grandCost, summaryItems };
+    }
+
+    function copyAIBOQ() {
+      if (!lastAIBOQ) return;
+      const b = lastAIBOQ;
+      const lines = [
+        `*BUILD SMART AI BOQ ESTIMATE*`,
+        `Area: ${b.area} sq.ft | Floors: ${b.floors} | Structure: ${b.structure.toUpperCase()}`,
+        `------------------------`,
+        ...b.summaryItems.map(x => `• ${x.name}: *${x.qStr}* (₹${fmtInt(x.amount)})`),
+        `------------------------`,
+        `*Estimated Total Material Cost:* ₹${fmtInt(b.grandCost)}`
+      ];
+      copyText(lines.join('\n'));
+    }
+
+    function prefillTrainFromEstimate() {
+      if (!lastAIBOQ) calcAIBOQ();
+      const area = parseFloat(document.getElementById('aiArea').value) || 1500;
+      const floors = document.getElementById('aiFloors').value;
+      const structure = document.getElementById('aiStructure').value;
+      const foundation = document.getElementById('aiFoundation').value;
+      const finish = document.getElementById('aiFinish').value;
+      const { rates } = getCalibratedRates();
+
+      document.getElementById('trArea').value = area;
+      document.getElementById('trFloors').value = floors;
+      document.getElementById('trStructure').value = structure;
+      document.getElementById('trFoundation').value = foundation;
+      document.getElementById('trFinish').value = finish;
+
+      document.getElementById('trCement').value = Math.round(area * rates.cement * getCompositeMultiplier(floors, structure, foundation, finish, 'cement'));
+      document.getElementById('trSteel').value = Math.round(area * rates.steel * getCompositeMultiplier(floors, structure, foundation, finish, 'steel'));
+      document.getElementById('trSand').value = Math.round(area * rates.sand * getCompositeMultiplier(floors, structure, foundation, finish, 'sand'));
+      document.getElementById('trAgg').value = Math.round(area * rates.agg * getCompositeMultiplier(floors, structure, foundation, finish, 'agg'));
+      document.getElementById('trBricks').value = Math.round(area * rates.bricks * getCompositeMultiplier(floors, structure, foundation, finish, 'bricks'));
+      document.getElementById('trTiles').value = Math.round(area * rates.tiles * getCompositeMultiplier(floors, structure, foundation, finish, 'tiles'));
+      document.getElementById('trPaint').value = Math.round(area * rates.paint * getCompositeMultiplier(floors, structure, foundation, finish, 'paint'));
+      showToast('Auto-filled from current estimate!');
+    }
+
+    function saveTrainingProject() {
+      const name = document.getElementById('trName').value.trim() || `Site #${getTrainingSites().length + 1}`;
+      const site = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('en-IN'),
+        name,
+        area: parseFloat(document.getElementById('trArea').value) || 1000,
+        floors: document.getElementById('trFloors').value,
+        structure: document.getElementById('trStructure').value,
+        foundation: document.getElementById('trFoundation').value,
+        finish: document.getElementById('trFinish').value,
+        cement: parseFloat(document.getElementById('trCement').value) || 0,
+        steel: parseFloat(document.getElementById('trSteel').value) || 0,
+        sand: parseFloat(document.getElementById('trSand').value) || 0,
+        agg: parseFloat(document.getElementById('trAgg').value) || 0,
+        bricks: parseFloat(document.getElementById('trBricks').value) || 0,
+        tiles: parseFloat(document.getElementById('trTiles').value) || 0,
+        paint: parseFloat(document.getElementById('trPaint').value) || 0
+      };
+      const sites = getTrainingSites();
+      sites.push(site);
+      setTrainingSites(sites);
+      document.getElementById('trName').value = '';
+      showToast(`Saved "${name}" & calibrated model!`);
+    }
+
+    function loadSampleProjects() {
+      const sites = getTrainingSites();
+      sites.push(
+        {
+          id: Date.now() + 1,
+          date: 'Sample 1',
+          name: 'Raipur G+1 Duplex (1,600 sq.ft)',
+          area: 1600,
+          floors: 'G+1',
+          structure: 'rcc',
+          foundation: 'normal',
+          finish: 'standard',
+          cement: 710,
+          steel: 6450,
+          sand: 3050,
+          agg: 2240,
+          bricks: 33500,
+          tiles: 1980,
+          paint: 295
+        },
+        {
+          id: Date.now() + 2,
+          date: 'Sample 2',
+          name: 'Commercial G+2 Block (2,800 sq.ft)',
+          area: 2800,
+          floors: 'G+2',
+          structure: 'rcc',
+          foundation: 'deep',
+          finish: 'premium',
+          cement: 1380,
+          steel: 12900,
+          sand: 5600,
+          agg: 4150,
+          bricks: 56000,
+          tiles: 3900,
+          paint: 590
+        }
+      );
+      setTrainingSites(sites);
+      showToast('Loaded 2 sample sites & calibrated!');
+    }
+
+    function renderRulesAndHistory() {
+      const { rates, count } = getCalibratedRates();
+      const grid = document.getElementById('rulesComparisonGrid');
+
+      grid.innerHTML = Object.keys(BASE_RATES).map(k => {
+        const meta = BASE_RATES[k];
+        const book = meta.base;
+        const firm = rates[k];
+        const diffPct = ((firm - book) / book) * 100;
+        const barPct = Math.min(100, Math.max(20, (firm / (book * 1.4)) * 100));
+
+        return `
+          <div class="member-box" style="margin-bottom:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <strong style="font-size:13px;">${meta.name}</strong>
+              <span class="tag ${Math.abs(diffPct) < 0.5 ? 'tag-slate' : 'tag-emerald'}">
+                ${diffPct >= 0 ? '+' : ''}${diffPct.toFixed(1)}% vs Book
+              </span>
+            </div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; justify-content:space-between;">
+              <span>Book Rule: <strong>${book.toFixed(2)} ${meta.unit}/sq.ft</strong></span>
+              <span>Firm Learned: <strong style="color:var(--emerald);">${firm.toFixed(2)} ${meta.unit}/sq.ft</strong></span>
+            </div>
+            <div class="rule-bar-wrap">
+              <div class="rule-bar-fill" style="width:${barPct}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const sites = getTrainingSites();
+      document.getElementById('savedProjectsCount').textContent = sites.length;
+      const listEl = document.getElementById('savedProjectsList');
+
+      if (!sites.length) {
+        listEl.innerHTML = '<div style="font-size:13px; color:var(--text-muted);">No training projects saved yet. Go to "5. Train Model" tab to log actual site data.</div>';
+        return;
+      }
+
+      listEl.innerHTML = sites.map((s, idx) => `
+        <div class="member-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <strong>${s.name}</strong> <span class="tag tag-slate">${s.floors} • ${s.area} sq.ft</span>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+              Cement: ${s.cement} Bags • Steel: ${s.steel} kg • Sand: ${s.sand} CFT • Bricks: ${s.bricks}
+            </div>
+          </div>
+          <button class="btn btn-danger-soft" onclick="deleteTrainingSite(${idx})">Delete</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteTrainingSite(idx) {
+      const sites = getTrainingSites();
+      sites.splice(idx, 1);
+      setTrainingSites(sites);
+      showToast('Project removed.');
+    }
+
+    function clearAllTrainingData() {
+      if (!confirm('Reset all saved training projects?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      refreshAllAI();
+      showToast('Training data reset.');
+    }
+
+    function exportTrainingJSON() {
+      const dataStr = JSON.stringify(getTrainingSites(), null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `buildsmart_training_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Backup JSON downloaded!');
+    }
+
+    function importTrainingJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (Array.isArray(parsed)) {
+            setTrainingSites(parsed);
+            showToast(`Imported ${parsed.length} training project(s)!`);
+          } else {
+            alert('Invalid backup JSON format.');
+          }
+        } catch (err) {
+          alert('Error reading JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function refreshAllAI() {
+      calcAIBOQ();
+      renderRulesAndHistory();
+    }
+
+    /* ==========================================================================
+       6. INITIALIZE APP ON LOAD
+       ========================================================================== */
+    renderFootingsBBS();
+    renderColumnsBBS();
+    renderBeamsBBS();
+    renderSlabsBBS();
+    recalcAllBBS();
+
+    calcInstantRCC();
+    calcInstantBrick();
+
+    renderDetRccRows();
+    recalcDetailedRCC();
+
+    refreshAllAI();
+  </script>
+
+  <!-- Service Worker Registration for PWA & Offline Support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
