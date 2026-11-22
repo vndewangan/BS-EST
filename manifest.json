@@ -1,4 +1,5 @@
 {
+  "id": "./",
   "name": "Build Smart AI Estimator",
   "short_name": "BuildSmart",
   "description": "39ft TMT BBS, RCC, Brickwall & Self-Calibrating Construction BOQ Estimator",
@@ -10,10 +11,16 @@
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230f172a'/%3E%3Crect x='32' y='32' width='448' height='448' rx='76' fill='none' stroke='%23059669' stroke-width='16'/%3E%3Ctext x='256' y='285' font-family='sans-serif' font-size='185' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EBS%3C/text%3E%3Crect x='136' y='340' width='240' height='24' rx='12' fill='%23d97706'/%3E%3C/svg%3E",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
